@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>포켓몬 캐치 스테이션 | 宝可梦捕捉站</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Arial, "Noto Sans KR", "Microsoft YaHei", sans-serif; }
+  </style>
+</head>
+<body class="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#e2e8f0_35%,#cbd5e1_100%)]">
+  <div id="app"></div>
+
+  <script>
+    const POKEMON = [
+      {id:25, ko:"피카츄", zh:"皮卡丘", en:"Pikachu", typeKo:"전기", typeZh:"电", genKo:"1세대", genZh:"第一世代", categoryKo:"마우스 포켓몬", categoryZh:"鼠宝可梦", height:"0.4m", weight:"6.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png", color:"from-yellow-100 via-amber-100 to-orange-100", descKo:"포켓몬을 대표하는 캐릭터로 높은 인지도와 친근한 이미지를 가지고 있습니다.", descZh:"作为宝可梦代表角色，拥有极高知名度和亲切形象。"},
+      {id:133, ko:"이브이", zh:"伊布", en:"Eevee", typeKo:"노말", typeZh:"一般", genKo:"1세대", genZh:"第一世代", categoryKo:"진화 포켓몬", categoryZh:"进化宝可梦", height:"0.3m", weight:"6.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/133.png", color:"from-orange-50 via-amber-50 to-yellow-50", descKo:"다양한 진화 가능성을 상징하는 포켓몬입니다.", descZh:"象征多种进化可能性的宝可梦。"},
+      {id:1, ko:"이상해씨", zh:"妙蛙种子", en:"Bulbasaur", typeKo:"풀", typeZh:"草", genKo:"1세대", genZh:"第一世代", categoryKo:"씨앗 포켓몬", categoryZh:"种子宝可梦", height:"0.7m", weight:"6.9kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png", color:"from-green-50 via-lime-50 to-emerald-100", descKo:"등에 씨앗을 지닌 자연 친화적인 포켓몬입니다.", descZh:"背上带着种子，形象自然亲和。"},
+      {id:4, ko:"파이리", zh:"小火龙", en:"Charmander", typeKo:"불", typeZh:"火", genKo:"1세대", genZh:"第一世代", categoryKo:"도롱뇽 포켓몬", categoryZh:"蜥蜴宝可梦", height:"0.6m", weight:"8.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png", color:"from-orange-50 via-red-50 to-rose-100", descKo:"꼬리의 불꽃이 특징인 대표 불꽃 포켓몬입니다.", descZh:"尾巴火焰是其最鲜明的特征。"},
+      {id:7, ko:"꼬부기", zh:"杰尼龟", en:"Squirtle", typeKo:"물", typeZh:"水", genKo:"1세대", genZh:"第一世代", categoryKo:"꼬마거북 포켓몬", categoryZh:"小龟宝可梦", height:"0.5m", weight:"9.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png", color:"from-sky-50 via-cyan-50 to-blue-100", descKo:"귀엽고 친숙한 이미지로 사랑받는 물 타입 포켓몬입니다.", descZh:"以可爱亲切形象深受欢迎的水属性宝可梦。"},
+      {id:39, ko:"푸린", zh:"胖丁", en:"Jigglypuff", typeKo:"노말", typeZh:"一般", genKo:"1세대", genZh:"第一世代", categoryKo:"풍선 포켓몬", categoryZh:"气球宝可梦", height:"0.5m", weight:"5.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/039.png", color:"from-pink-50 via-rose-50 to-fuchsia-100", descKo:"노래로 상대를 잠들게 하는 귀여운 포켓몬입니다.", descZh:"会用歌声让对手睡着的可爱宝可梦。"},
+      {id:52, ko:"나옹", zh:"喵喵", en:"Meowth", typeKo:"노말", typeZh:"一般", genKo:"1세대", genZh:"第一世代", categoryKo:"스크래치캣 포켓몬", categoryZh:"抓猫宝可梦", height:"0.4m", weight:"4.2kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/052.png", color:"from-amber-50 via-yellow-50 to-orange-100", descKo:"장난기 많은 고양이형 포켓몬입니다.", descZh:"顽皮又有个性的猫系宝可梦。"},
+      {id:54, ko:"고라파덕", zh:"可达鸭", en:"Psyduck", typeKo:"물", typeZh:"水", genKo:"1세대", genZh:"第一世代", categoryKo:"오리 포켓몬", categoryZh:"鸭宝可梦", height:"0.8m", weight:"19.6kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/054.png", color:"from-yellow-50 via-amber-50 to-lime-100", descKo:"늘 머리를 감싸쥐고 있는 독특한 포켓몬입니다.", descZh:"总是抱着头的经典搞笑宝可梦。"},
+      {id:58, ko:"가디", zh:"卡蒂狗", en:"Growlithe", typeKo:"불", typeZh:"火", genKo:"1세대", genZh:"第一世代", categoryKo:"강아지 포켓몬", categoryZh:"小狗宝可梦", height:"0.7m", weight:"19.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/058.png", color:"from-orange-50 via-red-50 to-yellow-100", descKo:"충성심이 강하고 용감한 개 포켓몬입니다.", descZh:"忠诚勇敢的小狗宝可梦。"},
+      {id:143, ko:"잠만보", zh:"卡比兽", en:"Snorlax", typeKo:"노말", typeZh:"一般", genKo:"1세대", genZh:"第一世代", categoryKo:"잠자기 포켓몬", categoryZh:"瞌睡宝可梦", height:"2.1m", weight:"460.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/143.png", color:"from-slate-50 via-cyan-50 to-slate-200", descKo:"먹고 자는 것을 좋아하는 거대한 포켓몬입니다.", descZh:"最喜欢吃和睡的大型宝可梦。"},
+      {id:152, ko:"치코리타", zh:"菊草叶", en:"Chikorita", typeKo:"풀", typeZh:"草", genKo:"2세대", genZh:"第二世代", categoryKo:"잎사귀 포켓몬", categoryZh:"叶子宝可梦", height:"0.9m", weight:"6.4kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/152.png", color:"from-green-50 via-lime-50 to-green-100", descKo:"온화하고 상쾌한 느낌의 풀 타입 포켓몬입니다.", descZh:"给人温和清新感觉的草属性宝可梦。"},
+      {id:155, ko:"브케인", zh:"火球鼠", en:"Cyndaquil", typeKo:"불", typeZh:"火", genKo:"2세대", genZh:"第二世代", categoryKo:"불쥐 포켓몬", categoryZh:"火鼠宝可梦", height:"0.5m", weight:"7.9kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/155.png", color:"from-orange-50 via-amber-50 to-red-100", descKo:"등에서 불꽃을 내뿜는 귀여운 불꽃 포켓몬입니다.", descZh:"背部会喷出火焰的可爱火属性宝可梦。"},
+      {id:158, ko:"리아코", zh:"小锯鳄", en:"Totodile", typeKo:"물", typeZh:"水", genKo:"2세대", genZh:"第二世代", categoryKo:"큰턱 포켓몬", categoryZh:"大颚宝可梦", height:"0.6m", weight:"9.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/158.png", color:"from-cyan-50 via-sky-50 to-blue-100", descKo:"활발하고 장난기 많은 악어형 포켓몬입니다.", descZh:"活泼好动、很有冲劲的鳄鱼宝可梦。"},
+      {id:172, ko:"피츄", zh:"皮丘", en:"Pichu", typeKo:"전기", typeZh:"电", genKo:"2세대", genZh:"第二世代", categoryKo:"아기쥐 포켓몬", categoryZh:"小鼠宝可梦", height:"0.3m", weight:"2.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/172.png", color:"from-yellow-50 via-amber-50 to-orange-100", descKo:"피카츄의 진화 전 형태로 아주 귀여운 아기 포켓몬입니다.", descZh:"皮卡丘的前一阶段，十分可爱的宝宝宝可梦。"},
+      {id:196, ko:"에브이", zh:"太阳伊布", en:"Espeon", typeKo:"에스퍼", typeZh:"超能力", genKo:"2세대", genZh:"第二世代", categoryKo:"태양 포켓몬", categoryZh:"太阳宝可梦", height:"0.9m", weight:"26.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/196.png", color:"from-purple-50 via-pink-50 to-violet-100", descKo:"날렵하고 우아한 에스퍼 타입 포켓몬입니다.", descZh:"敏捷优雅的超能力属性宝可梦。"},
+      {id:197, ko:"블래키", zh:"月亮伊布", en:"Umbreon", typeKo:"악", typeZh:"恶", genKo:"2세대", genZh:"第二世代", categoryKo:"달빛 포켓몬", categoryZh:"月光宝可梦", height:"1.0m", weight:"27.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/197.png", color:"from-slate-100 via-gray-100 to-indigo-100", descKo:"어두운 밤 분위기를 가진 인기 진화형 포켓몬입니다.", descZh:"带有夜晚氛围的人气进化型宝可梦。"},
+      {id:448, ko:"루카리오", zh:"路卡利欧", en:"Lucario", typeKo:"격투", typeZh:"格斗", genKo:"4세대", genZh:"第四世代", categoryKo:"파동 포켓몬", categoryZh:"波导宝可梦", height:"1.2m", weight:"54.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/448.png", color:"from-blue-50 via-indigo-50 to-slate-100", descKo:"강인하고 멋진 이미지로 높은 인기를 가진 포켓몬입니다.", descZh:"以帅气强大形象拥有很高人气。"},
+      {id:700, ko:"님피아", zh:"仙子伊布", en:"Sylveon", typeKo:"페어리", typeZh:"妖精", genKo:"6세대", genZh:"第六世代", categoryKo:"연결 포켓몬", categoryZh:"联结宝可梦", height:"1.0m", weight:"23.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/700.png", color:"from-pink-50 via-fuchsia-50 to-violet-100", descKo:"부드럽고 사랑스러운 이미지의 인기 포켓몬입니다.", descZh:"拥有温柔可爱形象的人气宝可梦。"},
+      {id:906, ko:"나오하", zh:"新叶喵", en:"Sprigatito", typeKo:"풀", typeZh:"草", genKo:"신작 스타팅", genZh:"新作御三家", categoryKo:"풀고양이 포켓몬", categoryZh:"草猫宝可梦", height:"0.4m", weight:"4.1kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/906.png", color:"from-green-50 via-emerald-50 to-teal-100", descKo:"최근 작품을 대표하는 세련된 스타팅 포켓몬입니다.", descZh:"代表新作的时尚草属性御三家。"},
+      {id:909, ko:"뜨아거", zh:"呆火鳄", en:"Fuecoco", typeKo:"불", typeZh:"火", genKo:"신작 스타팅", genZh:"新作御三家", categoryKo:"불악어 포켓몬", categoryZh:"火鳄宝可梦", height:"0.4m", weight:"9.8kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/909.png", color:"from-orange-50 via-red-50 to-pink-100", descKo:"통통한 외형과 강한 색감이 인상적인 스타팅 포켓몬입니다.", descZh:"外形圆润、配色鲜明的新作火系御三家。"},
+      {id:912, ko:"꾸왁스", zh:"润水鸭", en:"Quaxly", typeKo:"물", typeZh:"水", genKo:"신작 스타팅", genZh:"新作御三家", categoryKo:"새끼오리 포켓몬", categoryZh:"小鸭宝可梦", height:"0.5m", weight:"6.1kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/912.png", color:"from-blue-50 via-sky-50 to-cyan-100", descKo:"깔끔하고 단정한 이미지가 특징인 물 타입 스타팅입니다.", descZh:"以干净利落形象著称的水系御三家。"}
+    ];
+
+    const TYPE_META = {
+      "전체":"전체 포켓몬 보기 / 查看全部宝可梦",
+      "전기":"전기 타입 포켓몬 / 电属性宝可梦",
+      "노말":"노말 타입 포켓몬 / 一般属性宝可梦",
+      "풀":"풀 타입 포켓몬 / 草属性宝可梦",
+      "불":"불 타입 포켓몬 / 火属性宝可梦",
+      "물":"물 타입 포켓몬 / 水属性宝可梦",
+      "에스퍼":"에스퍼 타입 포켓몬 / 超能力属性宝可梦",
+      "악":"악 타입 포켓몬 / 恶属性宝可梦",
+      "격투":"격투 타입 포켓몬 / 格斗属性宝可梦",
+      "페어리":"페어리 타입 포켓몬 / 妖精属性宝可梦"
+    };
+
+    const app = document.getElementById('app');
+    let screen = "home";
+    let selectedType = "전체";
+    let selected = null;
+
+    function render() {
+      const types = ["전체", ...Array.from(new Set(POKEMON.map(p => p.type)))];
+      const filtered = selectedType === "전체" ? POKEMON : POKEMON.filter(p => p.type === selectedType);
+
+      let content = '';
+
+      if (screen === "home") {
+        content = `
+          <div class="flex flex-1 flex-col px-6 pb-6 pt-5">
+            <div class="rounded-[32px] bg-gradient-to-br from-yellow-100 via-amber-50 to-orange-100 p-6 shadow-lg">
+              <div class="mb-3 inline-flex rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-slate-700">
+                포켓몬 원본 아트워크 기반 데모 / 官方原版图鉴演示
+              </div>
+              <h2 class="text-[32px] font-black leading-tight text-slate-900">
+                친숙한 포켓몬을 탐색하고<br/>宝可梦探索与信息查看
+              </h2>
+              <p class="mt-3 text-sm leading-6 text-slate-700">
+                타입을 선택한 뒤 랜덤 추천을 받을 수 있고, 포켓몬의 기본 설정과 세대 정보, 특징을 확인할 수 있습니다.<br/>
+                选择属性后可以随机推荐宝可梦，并查看基础设定、世代信息和角色特点。
+              </p>
+              <div class="mt-5 grid grid-cols-2 gap-3">
+                <button onclick="pickRandom()" class="rounded-2xl bg-slate-900 px-4 py-4 text-sm font-bold text-white shadow">✨ 랜덤 추천 / 随机推荐</button>
+                <button onclick="openFirst()" class="rounded-2xl bg-white px-4 py-4 text-sm font-bold text-slate-900 shadow-sm">★ 바로 보기 / 直接查看</button>
+              </div>
+            </div>
+
+            <div class="mt-5 rounded-[26px] bg-white/85 p-4 shadow-sm">
+              <p class="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Type Filter / 属性筛选</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                ${types.map(type => `<button onclick="setType('${type}')" class="rounded-full px-4 py-2 text-sm font-bold transition ${selectedType===type ? 'bg-slate-900 text-white shadow' : 'bg-white text-slate-700 shadow-sm'}">${type}</button>`).join('')}
+              </div>
+              <p class="mt-3 text-sm leading-6 text-slate-600">${TYPE_META[selectedType] || ''}</p>
+            </div>
+
+            <div class="mt-5 grid gap-4 overflow-auto pb-1">
+              ${filtered.map(p => `
+                <button onclick="openDetail(${p.id})" class="w-full rounded-[28px] bg-gradient-to-br ${p.color} p-5 text-left shadow-lg transition">
+                  <div class="flex items-center gap-4">
+                    <div class="flex h-24 w-24 items-center justify-center rounded-[24px] bg-white/70 p-2 shadow-sm">
+                      <img src="${p.image}" alt="${p.ko}" class="h-full w-full object-contain" />
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <div class="mb-2 inline-flex rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-slate-700">
+                        ${p.type} 타입 · ${p.genKo}
+                      </div>
+                      <h3 class="truncate text-2xl font-black text-slate-900">${p.ko} / ${p.zh}</h3>
+                      <p class="mt-2 text-sm leading-6 text-slate-700">${p.descKo}<br/>${p.descZh}</p>
+                    </div>
+                  </div>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      if (screen === "random" && selected) {
+        content = `
+          <div class="flex flex-1 flex-col justify-center px-6 pb-6 pt-8">
+            <div class="rounded-[34px] bg-gradient-to-br ${selected.color} p-6 text-center shadow-xl">
+              <div class="mx-auto flex h-52 w-52 items-center justify-center rounded-[30px] bg-white/70 p-4 shadow-sm">
+                <img src="${selected.image}" alt="${selected.ko}" class="h-full w-full object-contain" />
+              </div>
+              <p class="mt-5 text-xs font-bold uppercase tracking-[0.28em] text-slate-500">Random Pick</p>
+              <h2 class="mt-2 text-4xl font-black text-slate-900">${selected.ko} / ${selected.zh}</h2>
+              <div class="mt-3 inline-flex rounded-full bg-white/85 px-4 py-2 text-sm font-bold text-slate-700">
+                ${selected.typeKo} 타입 · ${selected.genKo}
+              </div>
+              <p class="mt-5 text-sm leading-7 text-slate-700">${selected.descKo}<br/>${selected.descZh}</p>
+            </div>
+            <div class="mt-5 grid grid-cols-2 gap-3">
+              <button onclick="pickRandom()" class="rounded-2xl bg-white px-4 py-4 text-sm font-bold text-slate-900 shadow-sm">↻ 다시 뽑기 / 重新抽取</button>
+              <button onclick="screen='detail'; render();" class="rounded-2xl bg-slate-900 px-4 py-4 text-sm font-bold text-white shadow">ⓘ 상세 정보 / 详细信息</button>
+            </div>
+          </div>
+        `;
+      }
+
+      if (screen === "detail" && selected) {
+        content = `
+          <div class="flex flex-1 flex-col px-6 pb-6 pt-6">
+            <div class="rounded-[34px] bg-gradient-to-br ${selected.color} p-6 shadow-xl">
+              <div class="flex items-center gap-4">
+                <div class="flex h-28 w-28 items-center justify-center rounded-[24px] bg-white/75 p-3 shadow-sm">
+                  <img src="${selected.image}" alt="${selected.ko}" class="h-full w-full object-contain" />
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="inline-flex rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-slate-700">도감 정보 / 图鉴信息</div>
+                  <h2 class="mt-3 text-3xl font-black text-slate-900">${selected.ko} / ${selected.zh}</h2>
+                  <p class="mt-1 text-sm font-semibold text-slate-700">${selected.en}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-5 grid gap-4">
+              <div class="rounded-[26px] bg-white p-5 shadow-sm">
+                <p class="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Basic Info / 基本信息</p>
+                <div class="mt-3 grid grid-cols-2 gap-3 text-sm text-slate-700">
+                  <div class="rounded-2xl bg-slate-50 p-3"><span class="font-bold">타입 / 属性</span><br/>${selected.typeKo} / ${selected.typeZh}</div>
+                  <div class="rounded-2xl bg-slate-50 p-3"><span class="font-bold">세대 / 世代</span><br/>${selected.genKo} / ${selected.genZh}</div>
+                  <div class="rounded-2xl bg-slate-50 p-3"><span class="font-bold">분류 / 分类</span><br/>${selected.categoryKo} / ${selected.categoryZh}</div>
+                  <div class="rounded-2xl bg-slate-50 p-3"><span class="font-bold">신장·체중 / 身高·体重</span><br/>${selected.height} / ${selected.weight}</div>
+                </div>
+              </div>
+
+              <div class="rounded-[26px] bg-white p-5 shadow-sm">
+                <p class="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Description / 角色说明</p>
+                <p class="mt-3 text-sm leading-7 text-slate-700">${selected.descKo}<br/>${selected.descZh}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      app.innerHTML = `
+        <div class="p-6">
+          <div class="mx-auto max-w-[470px] rounded-[40px] border border-white/60 bg-white/20 p-4 shadow-2xl backdrop-blur-sm">
+            <div class="mx-auto flex min-h-[92vh] max-w-[430px] flex-col overflow-hidden rounded-[36px] bg-gradient-to-b from-[#fff8e7] via-white to-[#eef6ff] shadow-[0_30px_80px_rgba(15,23,42,0.20)]">
+              <div class="border-b border-white/70 bg-white/75 px-6 py-5 backdrop-blur">
+                <div class="flex items-center justify-between gap-3">
+                  <div>
+                    <p class="text-[11px] font-bold uppercase tracking-[0.28em] text-slate-400">Information Kiosk Demo</p>
+                    <h1 class="mt-1 text-2xl font-black text-slate-900">포켓몬 캐치 스테이션 / 宝可梦捕捉站</h1>
+                  </div>
+                  ${screen !== 'home' ? '<button onclick="goHome()" class="rounded-2xl bg-slate-900 p-3 text-white shadow">←</button>' : ''}
+                </div>
+              </div>
+              ${content}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function setType(type) { selectedType = type; render(); }
+    function pickRandom() {
+      const filtered = selectedType === "전체" ? POKEMON : POKEMON.filter(p => p.type === selectedType);
+      selected = filtered[Math.floor(Math.random() * filtered.length)];
+      screen = "random";
+      render();
+    }
+    function openDetail(id) { selected = POKEMON.find(p => p.id === id); screen = "detail"; render(); }
+    function openFirst() {
+      const filtered = selectedType === "전체" ? POKEMON : POKEMON.filter(p => p.type === selectedType);
+      selected = filtered[0];
+      screen = "detail";
+      render();
+    }
+    function goHome() { screen = "home"; render(); }
+
+    render();
+  </script>
+</body>
+</html>
